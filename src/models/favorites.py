@@ -7,11 +7,6 @@ from sqlalchemy.orm import mapped_column, Mapped, relationship
 from src.database import Base
 
 
-if typing.TYPE_CHECKING:
-    from src.models.books import BooksModel
-    from src.models.users import UsersModel
-
-
 class FavoritesModel(Base):
     __tablename__ = "favorites"
 

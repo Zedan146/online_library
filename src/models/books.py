@@ -8,10 +8,6 @@ from sqlalchemy import ForeignKey, DateTime, String
 from src.database import Base
 
 
-if typing.TYPE_CHECKING:
-    from src.models import reviews, favorites, users, genres
-
-
 class BooksModel(Base):
     __tablename__ = "books"
 
@@ -24,10 +20,10 @@ class BooksModel(Base):
     update_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     author_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
 
-    author: Mapped["users.UsersModel"] = relationship("UsersModel", back_populates="author_book")
-    genres: Mapped[list["genres.GenresModel"]] = relationship(
+    author: Mapped["UsersModel"] = relationship("UsersModel", back_populates="author_book")
+    genres: Mapped[list["GenresModel"]] = relationship(
         "GenresModel", back_populates="books", secondary="book_genres"
     )
-    reviews: Mapped[list["reviews.ReviewsModel"]] = relationship("ReviewsModel", back_populates="book")
-    favorites: Mapped[list["favorites.FavoritesModel"]] = relationship("FavoritesModel", back_populates="book")
+    reviews: Mapped[list["ReviewsModel"]] = relationship("ReviewsModel", back_populates="book")
+    favorites: Mapped[list["FavoritesModel"]] = relationship("FavoritesModel", back_populates="book")
 

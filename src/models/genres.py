@@ -6,10 +6,6 @@ from sqlalchemy import ForeignKey
 from src.database import Base
 
 
-if typing.TYPE_CHECKING:
-    from src.models.books import BooksModel
-
-
 class GenresModel(Base):
     __tablename__ = "genres"
 

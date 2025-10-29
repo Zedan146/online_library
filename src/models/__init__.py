@@ -3,6 +3,7 @@ from src.models.users import UsersModel
 from src.models.favorites import FavoritesModel
 from src.models.genres import GenresModel, BookGenresModel
 from src.models.roles import RolesModel
+from src.models.reviews import ReviewsModel
 
 __all__ = (
     "BooksModel",
@@ -11,4 +12,5 @@ __all__ = (
     "GenresModel",
     "BookGenresModel",
     "RolesModel",
+    "ReviewsModel",
 )

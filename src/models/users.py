@@ -6,10 +6,6 @@ from sqlalchemy import ForeignKey, String
 from src.database import Base
 
 
-if typing.TYPE_CHECKING:
-    from src.models import roles, books, reviews, favorites
-
-
 class UsersModel(Base):
     __tablename__ = "users"
 
@@ -21,7 +17,7 @@ class UsersModel(Base):
     last_name: Mapped[str]
     role_id: Mapped[int] = mapped_column(ForeignKey("roles.id", ondelete="CASCADE"))
 
-    role: Mapped["roles.RolesModel"] = relationship("RolesModel", back_populates="users")
-    author_book: Mapped[list["books.BooksModel"]] = relationship("BooksModel", back_populates="author")
-    reviews: Mapped[list["reviews.ReviewsModel"]] = relationship("ReviewsModel", back_populates="user")
-    favorites: Mapped[list["favorites.FavoritesModel"]] = relationship("FavoritesModel", back_populates="user")
+    role: Mapped["RolesModel"] = relationship("RolesModel", back_populates="users")
+    author_book: Mapped[list["BooksModel"]] = relationship("BooksModel", back_populates="author")
+    reviews: Mapped[list["ReviewsModel"]] = relationship("ReviewsModel", back_populates="user")
+    favorites: Mapped[list["FavoritesModel"]] = relationship("FavoritesModel", back_populates="user")
