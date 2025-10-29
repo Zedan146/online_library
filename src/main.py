@@ -1,8 +1,13 @@
+import sys
+from pathlib import Path
+
 import uvicorn
 from fastapi import FastAPI
 
-app = FastAPI()
+sys.path.append(str(Path(__file__).parent.parent))
 
+
+app = FastAPI()
 
 
 if __name__ == "__main__":
