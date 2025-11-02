@@ -7,11 +7,13 @@ from fastapi import FastAPI
 
 sys.path.append(str(Path(__file__).parent.parent))
 
-from src.api.role import router as router_role
+from src.api.role import router as role_router
+from src.api.auth import router as auth_router
 
 app = FastAPI()
 
-app.include_router(router_role)
+app.include_router(auth_router)
+app.include_router(role_router)
 
 
 if __name__ == "__main__":
