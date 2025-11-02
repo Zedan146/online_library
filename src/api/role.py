@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, Query
+from fastapi import APIRouter
 
 from src.database import async_session_maker
 from src.repositories.role import RoleRepository
@@ -19,4 +19,22 @@ async def create_role(data: RoleAdd):
         role = await RoleRepository(session).add(data)
         await session.commit()
 
-        return role
+    return role
+
+
+@router.put("/{role_id}", summary="Изменить роль")
+async def edit_role(role_id: int, data: RoleAdd):
+    async with async_session_maker() as session:
+        role = await RoleRepository(session).update(data, id=role_id)
+        await session.commit()
+
+    return role
+
+
+@router.delete("/{role_id}", summary="Удалить роль")
+async def delete_role(role_id: int):
+    async with async_session_maker() as session:
+        role = await RoleRepository(session).delete(id=role_id)
+        await session.commit()
+
+    return {"status":  "OK", "data": role}

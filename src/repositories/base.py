@@ -1,25 +1,52 @@
+from typing import Any, List, Optional
+
 from sqlalchemy import select, delete, insert, update
 from pydantic import BaseModel
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import DeclarativeBase
 
 
 class BaseRepository:
-    model = None
+    model: DeclarativeBase = None
     schema: BaseModel = None
 
-    def __init__(self, session):
+    def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_filtered(self, *filters, **filter_by):
+    async def get_filtered(self, *filters: Any, **filter_by: Any) -> List[BaseModel]:
         query = select(self.model).filter(*filters).filter_by(**filter_by)
         result = await self.session.execute(query)
 
-        return result.scalars().all()
+        return [self.schema.model_validate(model) for model in result.scalars().all()]
 
-    async def get_all(self):
+    async def get_all(self) -> List[BaseModel]:
         return await self.get_filtered()
 
-    async def add(self, data: BaseModel, **kwargs):
+    async def get_one_or_none(self, *args, **kwargs) -> Optional[BaseModel]:
+        query = select(self.model).filter(*args).filter_by(**kwargs)
+        result = await self.session.execute(query)
+        model = result.scalars().one_or_none()
+        if not model:
+            return None
+        return self.schema.model_validate(model)
+
+    async def add(self, data: BaseModel, **kwargs: Any) -> BaseModel:
         add_data_stmt = insert(self.model).values(**data.model_dump(), **kwargs).returning(self.model)
         result = await self.session.execute(add_data_stmt)
+        model = result.scalar_one()
 
-        return result.scalar_one()
+        return self.schema.model_validate(model)
+
+    async def update(self, data: BaseModel, **filter_by: Any) -> BaseModel:
+        update_data_stmt = update(self.model).filter_by(**filter_by).values(**data.model_dump()).returning(self.model)
+        result = await self.session.execute(update_data_stmt)
+        model = result.scalar_one()
+
+        return self.schema.model_validate(model)
+
+    async def delete(self, **filter_by: Any) -> BaseModel:
+        delete_stmt = delete(self.model).filter_by(**filter_by).returning(self.model)
+        result = await self.session.execute(delete_stmt)
+        model = result.scalar_one()
+
+        return self.schema.model_validate(model)
