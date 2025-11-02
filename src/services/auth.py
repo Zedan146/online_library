@@ -1,6 +1,8 @@
 from datetime import datetime, timezone, timedelta
 
 import jwt
+from fastapi import HTTPException
+from jwt.exceptions import DecodeError
 from pwdlib import PasswordHash
 
 from src.config import settings
@@ -22,3 +24,10 @@ class AuthService:
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
         return encoded_jwt
+
+    @staticmethod
+    def decode_token(token: str) -> dict:
+        try:
+            return jwt.decode(token, key=settings.JWT_SECRET_KEY, algorithms=settings.JWT_ALGORITHM)
+        except DecodeError:
+            raise HTTPException(status_code=401, detail="Неверный токен доступа")
