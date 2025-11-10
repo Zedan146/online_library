@@ -13,16 +13,23 @@ async def get_role(db: DBDep):
 
 @router.post("/", summary="Добавить роль")
 async def create_role(data: RoleAdd, db: DBDep):
-    return await db.roles.add(data)
+    role = await db.roles.add(data)
+    await db.commit()
+
+    return role
 
 
 @router.put("/{role_id}", summary="Изменить роль")
 async def edit_role(role_id: int, data: RoleAdd, db: DBDep):
-    return await db.roles.update(data, id=role_id)
+    role = await db.roles.update(data, id=role_id)
+    await db.commit()
+
+    return role
 
 
 @router.delete("/{role_id}", summary="Удалить роль")
 async def delete_role(role_id: int, db: DBDep):
     role = await db.roles.delete(id=role_id)
+    await db.commit()
 
     return {"status":  "OK", "data": role}

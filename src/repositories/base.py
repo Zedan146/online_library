@@ -3,11 +3,10 @@ from typing import Any, List, Optional
 from sqlalchemy import select, delete, insert, update
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import DeclarativeBase
 
 
 class BaseRepository:
-    model: DeclarativeBase = None
+    model = None
     schema: BaseModel = None
 
     def __init__(self, session: AsyncSession):
@@ -36,6 +35,12 @@ class BaseRepository:
         model = result.scalar_one()
 
         return self.schema.model_validate(model)
+
+    async def add_bulk(self, data: list[BaseModel]) -> list[BaseModel]:
+        add_data_stmt = insert(self.model).values([item.model_dump() for item in data]).returning(self.model)
+        result = await self.session.execute(add_data_stmt)
+
+        return [self.schema.model_validate(model) for model in result.scalars().all()]
 
     async def update(self, data: BaseModel, **filter_by: Any) -> BaseModel:
         update_data_stmt = update(self.model).filter_by(**filter_by).values(**data.model_dump()).returning(self.model)

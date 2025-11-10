@@ -3,11 +3,9 @@ from sqlalchemy.orm import DeclarativeBase
 
 from src.models import RolesModel
 from src.repositories.base import BaseRepository
-from src.schemas.role import Role
+from src.schemas.role import Role, RoleName
 
 
 class RoleRepository(BaseRepository):
     model: DeclarativeBase = RolesModel
     schema: BaseModel = Role
-
-

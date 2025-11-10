@@ -1,12 +1,19 @@
+from enum import Enum
+
 from pydantic import BaseModel, ConfigDict
 
 
-class Role(BaseModel):
-    id: int
-    title: str
-
-    model_config = ConfigDict(from_attributes=True)
+class RoleName(str, Enum):
+    ADMIN = "admin"
+    AUTHOR = "author"
+    USER = "user"
 
 
 class RoleAdd(BaseModel):
-    title: str
+    title: RoleName
+
+
+class Role(RoleAdd):
+    id: int
+
+    model_config = ConfigDict(from_attributes=True)
