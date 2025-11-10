@@ -1,9 +1,8 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, validator, field_validator
 
 
 class NonEmptyStringMixin(BaseModel):
     """Миксин для проверки непустых строк"""
-
     @validator("*", pre=True)
     def validate_all_string_fields(cls, v):
         if isinstance(v, str):

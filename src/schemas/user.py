@@ -19,7 +19,7 @@ class UserAdd(NonEmptyStringMixin):
     email: EmailStr
     first_name: str
     last_name: str
-    role_id: int = 6
+    role_id: int = 1
     hashed_password: str
 
 
