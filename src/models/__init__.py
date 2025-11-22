@@ -1,4 +1,4 @@
-from src.models.books import BooksModel
+from src.models.books import BooksModel, FilesModel
 from src.models.users import UsersModel
 from src.models.favorites import FavoritesModel
 from src.models.genres import GenresModel, BookGenresModel
@@ -13,4 +13,5 @@ __all__ = (
     "BookGenresModel",
     "RolesModel",
     "ReviewsModel",
+    "FilesModel"
 )

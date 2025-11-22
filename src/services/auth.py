@@ -1,8 +1,8 @@
 from datetime import datetime, timezone, timedelta
 
 import jwt
-from fastapi import HTTPException
-from jwt.exceptions import DecodeError
+from fastapi import HTTPException, status
+from jwt.exceptions import DecodeError, ExpiredSignatureError
 from pwdlib import PasswordHash
 
 from src.config import settings
@@ -31,3 +31,5 @@ class AuthService:
             return jwt.decode(token, key=settings.JWT_SECRET_KEY, algorithms=settings.JWT_ALGORITHM)
         except DecodeError:
             raise HTTPException(status_code=401, detail="Неверный токен доступа")
+        except ExpiredSignatureError:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Срок действия вашего токена истек")
