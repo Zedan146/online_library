@@ -11,6 +11,7 @@ class FileReadSchema(BaseModel):
     filename: str
     file_size: int
     file_path: str
+    file_type: FileType
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
@@ -37,7 +38,7 @@ class BookReadSchema(BookCreateSchema):
     id: int
     created_at: datetime
     updated_at: datetime
-    cover_image_url: Optional[FileReadSchema] = None
-    book_file_url: Optional[FileReadSchema] = None
+    cover_image: Optional[FileReadSchema] = None
+    book_file: Optional[FileReadSchema] = None
 
     model_config = ConfigDict(from_attributes=True)

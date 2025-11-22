@@ -11,7 +11,7 @@ router = APIRouter(prefix="/books", tags=["Книги"])
 
 @router.get("", summary="Получить все книги")
 async def get_all_books(db: DBDep):
-    return await db.books.get_all()
+    return await db.books.get_all_with_files()
 
 
 @router.post("", summary="Добавление книги")

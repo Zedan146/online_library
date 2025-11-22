@@ -28,7 +28,7 @@ class BookService(BaseService):
 
         await self.db.commit()
 
-        return await self.db.books.get_one_or_none(id=book.id)
+        return await self.db.books.get_one(id=book.id)
 
     @staticmethod
     def _save_file(file: UploadFile, ftype: FileType, book_id: int) -> FileCreateSchema:

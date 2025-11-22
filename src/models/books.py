@@ -30,6 +30,20 @@ class BooksModel(Base):
     favorites: Mapped[list["FavoritesModel"]] = relationship("FavoritesModel", back_populates="book")
     files: Mapped[list["FilesModel"]] = relationship("FilesModel", back_populates="book")
 
+    cover_image: Mapped[typing.Optional["FilesModel"]] = relationship(
+        "FilesModel",
+        primaryjoin="and_(BooksModel.id==FilesModel.book_id, FilesModel.file_type=='COVER')",
+        uselist=False,
+        viewonly=True
+    )
+
+    book_file: Mapped[typing.Optional["FilesModel"]] = relationship(
+        "FilesModel",
+        primaryjoin="and_(BooksModel.id==FilesModel.book_id, FilesModel.file_type=='BOOK')",
+        uselist=False,
+        viewonly=True
+    )
+
 
 class FileType(enum.Enum):
     COVER = "cover"
